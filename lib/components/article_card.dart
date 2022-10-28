@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:researchcore/providers/favorites_provider.dart';
 import 'package:researchcore/utils/theme_util.dart';
 
 import '../models/article.dart';
 
 class ArticleCard extends StatelessWidget {
   final Article article;
+  final bool isFavoriteScreen;
 
-  const ArticleCard({Key? key, required this.article}) : super(key: key);
+  const ArticleCard(
+      {Key? key, required this.article, this.isFavoriteScreen = false})
+      : super(key: key);
 
   Widget _infoRow(
       BuildContext context, bool isVisible, IconData iconName, String text) {
@@ -38,95 +43,36 @@ class ArticleCard extends StatelessWidget {
     return const SizedBox(height: 0.0, width: 0.0);
   }
 
+  Widget _iconButton(IconData iconName, void Function() onPressed) {
+    return IconButton(
+      onPressed: onPressed,
+      icon: Icon(
+        iconName,
+        size: 32.0,
+        color: ThemeUtil.primaryColor,
+      ),
+    );
+  }
+
   Widget _ctaButtonsRow(BuildContext context) {
+    final favoritesProvider = Provider.of<FavoritesProvider>(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
-        IconButton(
-          icon: const Icon(
-              // TODO:
-              // Display the delete icon in favorites screen instead of favorite
-              //   widget.screenName == "Favorite"
-              //       ? Icons.delete
-              //       : (widget.article.isFavorite
-              //       ? Icons.favorite
-              //       : Icons.favorite_border),
-              Icons.favorite,
-              size: 32.0,
-              color: Colors.red),
-          onPressed: () {
-            print('favorite clicked...');
-          }, // TODO: on favorite or delete pressed handlers
-        ),
-        IconButton(
-            disabledColor: Colors.grey,
-            color: Colors.red,
-            icon: const Icon(
-              Icons.details,
-              size: 32.0,
-            ),
-            onPressed:
-                () {} // TODO: details press handler, probably should make entire card clickable
-            // onPressed: article.description != null ||
-            //     article.description == ''
-            //     ? () {
-            //   Navigator.push(
-            //     context,
-            //     new MaterialPageRoute(
-            //       builder: (context) {
-            //         return new ArticleDetailScreen(
-            //           article: widget.article,
-            //           downloadArticle: this._downloadArticle,
-            //         );
-            //       },
-            //     ),
-            //   );
-            // }
-            //     : null,
-            ),
-        IconButton(
-          disabledColor: Colors.grey,
-          icon: const Icon(Icons.picture_as_pdf, size: 32.0, color: Colors.red),
-          onPressed: () {}, // TODO: view PDF handler
-          // onPressed: widget.article.downloadUrl != ''
-          //     ? () {
-          //   articleStore.updateAdDisplayCount();
-          //   if (articleStore.adDisplayCount == 3)
-          //     _interstitialAd..show();
-          //   print('view pdf clicked..');
-          //   //var file = await createFileOfPdfUrl(article.downloadUrl);
-          //   // setState(() {
-          //   //   pdfPath:
-          //   //   file.path;
-          //   // });
-          //   //print(file.path);
-          //   print(
-          //       'download url: ' + widget.article.downloadUrl);
-          //   return Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //       builder: (context) =>
-          //       //PdfViewScreen(pdfUrl: file.path),
-          //       PdfViewScreen(
-          //         article: widget.article,
-          //         downloadArticle: this._downloadArticle,
-          //       ),
-          //     ),
-          //   );
-          // }
-          //     : null,
-        ),
-        IconButton(
-          icon: const Icon(Icons.file_download, size: 32.0),
-          onPressed: () {}, // TODO: download handler
-          // onPressed: article.downloadUrl != ''
-          //     ? () {
-          //   this._downloadArticle(widget.article);
-          // }
-          //     : null,
-          color: Colors.red,
-          disabledColor: Colors.grey,
-        ),
+        isFavoriteScreen
+            ? _iconButton(Icons.delete, () async {
+                favoritesProvider.deleteFavoriteArticle(article);
+              })
+            : _iconButton(
+                article.isFavorite ? Icons.favorite : Icons.favorite_border,
+                () async {
+                article.isFavorite
+                    ? await favoritesProvider.deleteFavoriteArticle(article)
+                    : await favoritesProvider.addFavoriteArticle(article);
+              }),
+        _iconButton(Icons.share, () {}),
+        _iconButton(Icons.picture_as_pdf, () {}),
+        _iconButton(Icons.file_download, () {})
       ],
     );
   }

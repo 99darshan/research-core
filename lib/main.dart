@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:researchcore/providers/article_provider.dart';
+import 'package:researchcore/providers/favorites_provider.dart';
+import 'package:researchcore/screens/favorite_screen.dart';
 import 'package:researchcore/screens/home_screen.dart';
 import 'package:researchcore/utils/theme_util.dart';
 
 void main() {
-  runApp(MultiProvider(
-      providers: [Provider<ArticleProvider>(create: (_) => ArticleProvider())],
-      child: const MyApp()));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider<FavoritesProvider>(
+        create: (_) => FavoritesProvider())
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -25,7 +27,7 @@ class MyAppState extends State<MyApp> {
 
   final _pages = [
     const HomeScreen(),
-    // FavoriteScreen(),
+    const FavoriteScreen(),
     // DownloadsScreen(),
     // AboutPage(),
   ];

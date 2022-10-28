@@ -26,9 +26,17 @@ class Article {
   factory Article.fromJson(Map<String, dynamic> parsedJson) {
     return Article(
       id: parsedJson['id'],
-      authors: (parsedJson['authors'] as List).map((author) => author['name'] as String).toList(),
+      authors: (parsedJson['authors'] as List).map((author) {
+        // API returns authors: Map<string, string>
+        // When deserializing from shared preferences favorites author is stored as List<String>
+        if (author is String) {
+          return author;
+        } else {
+          return author['name'] as String;
+        }
+      }).toList(),
       title: parsedJson['title'],
-      year: parsedJson['yearPublished'],
+      year: parsedJson['yearPublished'] ?? parsedJson['year'],
       doi: parsedJson['doi'],
       description: parsedJson['description'],
       downloadUrl: parsedJson['downloadUrl'],
