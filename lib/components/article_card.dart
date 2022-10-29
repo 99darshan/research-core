@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:researchcore/providers/favorites_provider.dart';
+import 'package:researchcore/screens/pdf_view_screen.dart';
 import 'package:researchcore/utils/theme_util.dart';
 
 import '../models/article.dart';
@@ -71,7 +72,20 @@ class ArticleCard extends StatelessWidget {
                     : await favoritesProvider.addFavoriteArticle(article);
               }),
         _iconButton(Icons.share, () {}),
-        _iconButton(Icons.picture_as_pdf, () {}),
+        article.extractPdfUrl().isNotEmpty
+            ? _iconButton(Icons.picture_as_pdf, () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return PdfViewScreen(
+                        pdfUrl: article.extractPdfUrl(),
+                      );
+                    },
+                  ),
+                );
+              })
+            : const SizedBox(),
         _iconButton(Icons.file_download, () {})
       ],
     );
@@ -140,7 +154,7 @@ class ArticleCard extends StatelessWidget {
               // Authors Row
               _infoRow(context, (article.authors ?? []).isNotEmpty,
                   Icons.people, '${article.authors?.join(', ')}'),
-              _infoRow(context, article?.publisher?.isNotEmpty ?? false,
+              _infoRow(context, article.publisher?.isNotEmpty ?? false,
                   Icons.book, '${article.publisher}'),
               const Divider(
                 color: Colors.grey,

@@ -64,6 +64,18 @@ class Article {
       'publisher': publisher
     };
   }
+
+  String extractPdfUrl() {
+    final url = downloadUrl ?? '';
+
+    if (url.endsWith('.pdf')) {
+      return url;
+    } else if (url.contains('arxiv.org/abs/')) {
+      return '${url.replaceFirst('/abs/', '/pdf/')}.pdf';
+    } else {
+      return '';
+    }
+  }
 }
 
 class Language {
