@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:researchcore/providers/favorites_provider.dart';
+import 'package:researchcore/screens/downloads_screen.dart';
 import 'package:researchcore/screens/favorite_screen.dart';
 import 'package:researchcore/screens/home_screen.dart';
 import 'package:researchcore/utils/theme_util.dart';
@@ -28,7 +29,7 @@ class MyAppState extends State<MyApp> {
   final _pages = [
     const HomeScreen(),
     const FavoriteScreen(),
-    // DownloadsScreen(),
+    const DownloadsScreen(),
     // AboutPage(),
   ];
 
@@ -71,7 +72,7 @@ class MyAppState extends State<MyApp> {
               BottomNavigationBarItem(
                 label: 'Downloads',
                 icon: Icon(
-                  Icons.file_download,
+                  Icons.cloud_download_outlined,
                 ),
               ),
               BottomNavigationBarItem(

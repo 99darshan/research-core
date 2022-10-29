@@ -2,17 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:researchcore/providers/favorites_provider.dart';
 import 'package:researchcore/screens/pdf_view_screen.dart';
+import 'package:researchcore/services/download_service.dart';
 import 'package:researchcore/utils/theme_util.dart';
 
 import '../models/article.dart';
 
-class ArticleCard extends StatelessWidget {
+class ArticleCard extends StatefulWidget {
   final Article article;
   final bool isFavoriteScreen;
+  late final String _pdfUrl;
 
-  const ArticleCard(
-      {Key? key, required this.article, this.isFavoriteScreen = false})
-      : super(key: key);
+  ArticleCard({Key? key, required this.article, this.isFavoriteScreen = false})
+      : super(key: key) {
+    _pdfUrl = article.extractPdfUrl();
+  }
+
+  @override
+  State<ArticleCard> createState() => _ArticleCardState();
+}
+
+class _ArticleCardState extends State<ArticleCard> {
+  IconData _downloadIcon = Icons.cloud_download_outlined;
+  bool _isDownloading = false;
 
   Widget _infoRow(
       BuildContext context, bool isVisible, IconData iconName, String text) {
@@ -52,41 +63,97 @@ class ArticleCard extends StatelessWidget {
         size: 32.0,
         color: ThemeUtil.primaryColor,
       ),
+      isSelected: true,
     );
+  }
+
+  Widget _downloadButton() {
+    if (widget._pdfUrl.isEmpty) {
+      return const SizedBox();
+    }
+
+    if (_isDownloading) {
+      return const SizedBox(
+        height: 30.0,
+        width: 30.0,
+        child: CircularProgressIndicator(),
+      );
+    } else {
+      return _iconButton(_downloadIcon, () {
+        _showSnackBar(
+            '🎬 ⏳ Download Started! \n \n It may take some time depending on the file size. ⏳');
+
+        setState(() {
+          _isDownloading = true;
+        });
+
+        DownloadService.download(
+          widget._pdfUrl,
+          widget.article.title!,
+          onComplete: (val) {
+            setState(() {
+              _isDownloading = false;
+              _downloadIcon = Icons.cloud_done_outlined;
+            });
+
+            _showSnackBar(
+                '🎉 File Downloaded Successfully 🎉 \n \n View File on Downloads Tab.');
+          },
+          onError: (err) {
+            setState(() {
+              _isDownloading = false;
+            });
+
+            _showSnackBar('😭 Error Downloading File. 😭 Please Try Again!');
+          },
+        );
+      });
+    }
+  }
+
+  _showSnackBar(String title) {
+    return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(title),
+      duration: const Duration(seconds: 2),
+    ));
   }
 
   Widget _ctaButtonsRow(BuildContext context) {
     final favoritesProvider = Provider.of<FavoritesProvider>(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
-        isFavoriteScreen
+        widget.isFavoriteScreen
             ? _iconButton(Icons.delete, () async {
-                favoritesProvider.deleteFavoriteArticle(article);
+                favoritesProvider.deleteFavoriteArticle(widget.article);
               })
             : _iconButton(
-                article.isFavorite ? Icons.favorite : Icons.favorite_border,
-                () async {
-                article.isFavorite
-                    ? await favoritesProvider.deleteFavoriteArticle(article)
-                    : await favoritesProvider.addFavoriteArticle(article);
+                widget.article.isFavorite
+                    ? Icons.favorite
+                    : Icons.favorite_border, () async {
+                widget.article.isFavorite
+                    ? await favoritesProvider
+                        .deleteFavoriteArticle(widget.article)
+                    : await favoritesProvider
+                        .addFavoriteArticle(widget.article);
               }),
         _iconButton(Icons.share, () {}),
-        article.extractPdfUrl().isNotEmpty
+        widget._pdfUrl.isNotEmpty
             ? _iconButton(Icons.picture_as_pdf, () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) {
                       return PdfViewScreen(
-                        pdfUrl: article.extractPdfUrl(),
+                        pdfUrl: widget._pdfUrl,
                       );
                     },
                   ),
                 );
               })
             : const SizedBox(),
-        _iconButton(Icons.file_download, () {})
+        _downloadButton()
       ],
     );
   }
@@ -97,7 +164,7 @@ class ArticleCard extends StatelessWidget {
       onTap: () {
         print('card clicked....');
         // TODO: show article detail screen
-        if (article.description?.isNotEmpty ?? false) {
+        if (widget.article.description?.isNotEmpty ?? false) {
           // Navigator.push(
           //   context,
           //   MaterialPageRoute(
@@ -126,7 +193,7 @@ class ArticleCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
-                  article.title.toString(),
+                  widget.article.title.toString(),
                   style: Theme.of(context).textTheme.headline6,
                 ),
               ),
@@ -137,25 +204,25 @@ class ArticleCard extends StatelessWidget {
                     flex: 1,
                     child: _infoRow(
                         context,
-                        article.year?.toString().isNotEmpty ?? false,
+                        widget.article.year?.toString().isNotEmpty ?? false,
                         Icons.calendar_today,
-                        '${article.year}'),
+                        '${widget.article.year}'),
                   ),
                   Expanded(
                     flex: 1,
                     child: _infoRow(
                         context,
-                        article.language?.name?.isNotEmpty ?? false,
+                        widget.article.language?.name?.isNotEmpty ?? false,
                         Icons.language,
-                        '${article.language?.name}'),
+                        '${widget.article.language?.name}'),
                   ),
                 ],
               ),
               // Authors Row
-              _infoRow(context, (article.authors ?? []).isNotEmpty,
-                  Icons.people, '${article.authors?.join(', ')}'),
-              _infoRow(context, article.publisher?.isNotEmpty ?? false,
-                  Icons.book, '${article.publisher}'),
+              _infoRow(context, (widget.article.authors ?? []).isNotEmpty,
+                  Icons.people, '${widget.article.authors?.join(', ')}'),
+              _infoRow(context, widget.article.publisher?.isNotEmpty ?? false,
+                  Icons.book, '${widget.article.publisher}'),
               const Divider(
                 color: Colors.grey,
               ),

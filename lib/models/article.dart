@@ -71,7 +71,7 @@ class Article {
     if (url.endsWith('.pdf')) {
       return url;
     } else if (url.contains('arxiv.org/abs/')) {
-      return '${url.replaceFirst('/abs/', '/pdf/')}.pdf';
+      return '${url.replaceFirst('http:', 'https:').replaceFirst('/abs/', '/pdf/')}.pdf';
     } else {
       return '';
     }

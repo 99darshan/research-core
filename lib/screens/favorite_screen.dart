@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:researchcore/components/full_screen_info.dart';
 
 import '../components/article_card.dart';
 import '../models/article.dart';
@@ -15,21 +16,27 @@ class FavoriteScreen extends StatelessWidget {
     // TODO: show proper message when there are no favorites
     return Scaffold(
       appBar: AppBar(title: const Text('Favourites')),
-      body: ListView.builder(
-        itemCount: favouriteKeys?.length ?? 0,
-        itemBuilder: (context, index) {
-          final articleKey = favouriteKeys?.elementAt(index);
-          if (articleKey?.isEmpty ?? true) {
-            return const SizedBox();
-          }
-          // return const Text('What this shite man');
-          Article article = favoritesProvider.findArticleByKey('$articleKey');
-          return ArticleCard(
-            article: article,
-            isFavoriteScreen: true,
-          );
-        },
-      ),
+      body: (favouriteKeys?.isEmpty ?? true)
+          ? const FullScreenInfo(
+              iconName: Icons.favorite_border_outlined,
+              title: 'Empty Favorites Folder!',
+              subTitle: 'Bookmarked articles will show up here.',
+            )
+          : ListView.builder(
+              itemCount: favouriteKeys?.length ?? 0,
+              itemBuilder: (context, index) {
+                final articleKey = favouriteKeys?.elementAt(index);
+                if (articleKey?.isEmpty ?? true) {
+                  return const SizedBox();
+                }
+                Article article =
+                    favoritesProvider.findArticleByKey('$articleKey');
+                return ArticleCard(
+                  article: article,
+                  isFavoriteScreen: true,
+                );
+              },
+            ),
     );
   }
 }
