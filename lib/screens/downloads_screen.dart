@@ -17,6 +17,7 @@ class DownloadsScreen extends StatefulWidget {
 
 class _DownloadsScreenState extends State<DownloadsScreen> {
   late List<FileSystemEntity> _downloads = [];
+  bool _initializingDownloads = true;
 
   @override
   void initState() {
@@ -25,9 +26,10 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
   }
 
   _initAllDownloads() async {
-    var dloads = await DownloadService.allDownloads();
+    var allDownloads = await DownloadService.allDownloads();
     setState(() {
-      _downloads = dloads;
+      _downloads = allDownloads;
+      _initializingDownloads = false;
     });
   }
 
@@ -37,60 +39,62 @@ class _DownloadsScreenState extends State<DownloadsScreen> {
       appBar: AppBar(
         title: const Text('Downloads'),
       ),
-      body: _downloads.isEmpty
-          ? const FullScreenInfo(
-              iconName: Icons.integration_instructions_outlined,
-              title: 'Empty downloads folder!',
-              subTitle: 'Downloaded articles will show up here.',
-            )
-          : ListView.builder(
-              itemCount: _downloads.length,
-              itemBuilder: (context, index) {
-                final filePath = _downloads[index].path;
+      body: _initializingDownloads
+          ? const SizedBox()
+          : _downloads.isEmpty
+              ? const FullScreenInfo(
+                  iconName: Icons.integration_instructions_outlined,
+                  title: 'Empty downloads folder!',
+                  subTitle: 'Downloaded articles will show up here.',
+                )
+              : ListView.builder(
+                  itemCount: _downloads.length,
+                  itemBuilder: (context, index) {
+                    final filePath = _downloads[index].path;
 
-                return GestureDetector(
-                  child: Card(
-                    margin: const EdgeInsets.symmetric(vertical: 4.0),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 2.0),
-                      child: ListTile(
-                        leading: null,
-                        title: Text(FileUtil.fileName(filePath)),
-                        trailing: IconButton(
-                          icon: const Icon(
-                            Icons.delete,
-                            color: ThemeUtil.primaryColor,
+                    return GestureDetector(
+                      child: Card(
+                        margin: const EdgeInsets.symmetric(vertical: 4.0),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 2.0),
+                          child: ListTile(
+                            leading: null,
+                            title: Text(FileUtil.fileName(filePath)),
+                            trailing: IconButton(
+                              icon: const Icon(
+                                Icons.delete,
+                                color: ThemeUtil.primaryColor,
+                              ),
+                              onPressed: () {
+                                _downloads[index].deleteSync();
+                                _downloads.removeAt(index);
+                                setState(() {
+                                  _downloads = _downloads;
+                                });
+                              },
+                            ),
                           ),
-                          onPressed: () {
-                            _downloads[index].deleteSync();
-                            _downloads.removeAt(index);
-                            setState(() {
-                              _downloads = _downloads;
-                            });
-                          },
                         ),
                       ),
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return PdfViewScreen(
-                            filePath: filePath,
-                          );
-                        },
-                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return PdfViewScreen(
+                                filePath: filePath,
+                              );
+                            },
+                          ),
+                        );
+                      },
                     );
                   },
-                );
-              },
-            ),
+                ),
     );
   }
 }

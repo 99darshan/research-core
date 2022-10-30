@@ -13,7 +13,7 @@ class FavoriteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final favoritesProvider = Provider.of<FavoritesProvider>(context);
     final favouriteKeys = favoritesProvider.favoriteArticles;
-    // TODO: show proper message when there are no favorites
+
     return Scaffold(
       appBar: AppBar(title: const Text('Favourites')),
       body: (favouriteKeys?.isEmpty ?? true)

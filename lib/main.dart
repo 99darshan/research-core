@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:researchcore/providers/favorites_provider.dart';
+import 'package:researchcore/screens/about_screen.dart';
 import 'package:researchcore/screens/downloads_screen.dart';
 import 'package:researchcore/screens/favorite_screen.dart';
 import 'package:researchcore/screens/home_screen.dart';
@@ -30,7 +31,7 @@ class MyAppState extends State<MyApp> {
     const HomeScreen(),
     const FavoriteScreen(),
     const DownloadsScreen(),
-    // AboutPage(),
+    const AboutScreen(),
   ];
 
   var _selectedPageIndex = 0;
