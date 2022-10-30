@@ -6,6 +6,7 @@ import 'package:researchcore/services/download_service.dart';
 import 'package:researchcore/utils/theme_util.dart';
 
 import '../models/article.dart';
+import '../screens/article_detail_screen.dart';
 
 class ArticleCard extends StatefulWidget {
   final Article article;
@@ -162,20 +163,18 @@ class _ArticleCardState extends State<ArticleCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print('card clicked....');
-        // TODO: show article detail screen
-        if (widget.article.description?.isNotEmpty ?? false) {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) {
-          //       return new ArticleDetailScreen(
-          //         article: widget.article,
-          //         downloadArticle: this._downloadArticle,
-          //       );
-          //     },
-          //   ),
-          // );
+        if (widget.article.abstract?.isNotEmpty ?? false) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return ArticleDetailScreen(
+                  article: widget.article,
+                  // downloadArticle: this._downloadArticle,
+                );
+              },
+            ),
+          );
         }
       },
       child: Card(

@@ -6,7 +6,7 @@ class Article {
   final int? year;
   final String? doi;
   final String? downloadUrl;
-  final String? description;
+  final String? abstract;
   final String? publisher;
   bool isFavorite;
 
@@ -15,7 +15,7 @@ class Article {
     this.authors,
     this.title,
     this.language,
-    this.description,
+    this.abstract,
     this.year,
     this.doi,
     this.downloadUrl,
@@ -38,7 +38,7 @@ class Article {
       title: parsedJson['title'],
       year: parsedJson['yearPublished'] ?? parsedJson['year'],
       doi: parsedJson['doi'],
-      description: parsedJson['description'],
+      abstract: parsedJson['abstract'],
       downloadUrl: parsedJson['downloadUrl'],
       publisher: parsedJson['publisher'],
       language: parsedJson['language'] != null
@@ -57,7 +57,7 @@ class Article {
       'title': title,
       'year': year,
       'doi': doi,
-      'description': description,
+      'abstract': abstract,
       'downloadUrl': downloadUrl,
       'language': language?.toJson(),
       'isFavorite': isFavorite,
