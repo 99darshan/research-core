@@ -32,7 +32,6 @@ dependencies:
   flutter:
     sdk: flutter
   provider: ^6.0.4
-  http: ^0.13.5 # TODO: remove redundant because of dio, replace usage
   shared_preferences: ^2.0.15
   syncfusion_flutter_pdfviewer: ^20.3.52
   path_provider: ^2.0.11

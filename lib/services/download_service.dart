@@ -17,7 +17,9 @@ class DownloadService {
             url,
             savePath,
             cancelToken: CancelToken(),
-            options: Options(headers: {'User-Agent': 'PostmanRuntime/7.29.0'}),
+            options: Options(headers: {
+              io.HttpHeaders.userAgentHeader: 'PostmanRuntime/7.29.0'
+            }),
           )
           .then(onComplete)
           .catchError(onError);
