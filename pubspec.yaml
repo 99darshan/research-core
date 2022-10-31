@@ -36,6 +36,7 @@ dependencies:
   syncfusion_flutter_pdfviewer: ^20.3.52
   path_provider: ^2.0.11
   dio: ^4.0.6
+  url_launcher: ^6.1.6
 
 dev_dependencies:
   flutter_test:
@@ -62,6 +63,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/research-core-logo.png
+    - assets/images/core-ac-logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
