@@ -144,7 +144,9 @@ class _ArticleCardState extends State<ArticleCard> {
     final favoritesProvider = Provider.of<FavoritesProvider>(context);
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: widget._pdfUrl.isNotEmpty
+          ? MainAxisAlignment.spaceAround
+          : MainAxisAlignment.center,
       children: <Widget>[
         widget.isFavoriteScreen
             ? _iconButton(Icons.delete, () async {
@@ -160,7 +162,6 @@ class _ArticleCardState extends State<ArticleCard> {
                     : await favoritesProvider
                         .addFavoriteArticle(widget.article);
               }),
-        _iconButton(Icons.share, () {}),
         widget._pdfUrl.isNotEmpty
             ? _iconButton(Icons.picture_as_pdf, () {
                 Navigator.push(
