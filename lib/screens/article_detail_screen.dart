@@ -19,6 +19,7 @@ class ArticleDetailScreen extends StatelessWidget {
           children: [
             ArticleCard(
               article: article,
+              isArticleDetailScreen: true,
             ),
             Card(
               margin: const EdgeInsets.symmetric(vertical: 4.0),

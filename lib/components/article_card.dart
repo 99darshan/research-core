@@ -11,9 +11,14 @@ import '../screens/article_detail_screen.dart';
 class ArticleCard extends StatefulWidget {
   final Article article;
   final bool isFavoriteScreen;
+  final bool isArticleDetailScreen;
   late final String _pdfUrl;
 
-  ArticleCard({Key? key, required this.article, this.isFavoriteScreen = false})
+  ArticleCard(
+      {Key? key,
+      required this.article,
+      this.isFavoriteScreen = false,
+      this.isArticleDetailScreen = false})
       : super(key: key) {
     _pdfUrl = article.extractPdfUrl();
   }
@@ -25,6 +30,22 @@ class ArticleCard extends StatefulWidget {
 class _ArticleCardState extends State<ArticleCard> {
   IconData _downloadIcon = Icons.cloud_download_outlined;
   bool _isDownloading = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final favoritesProvider =
+          Provider.of<FavoritesProvider>(context, listen: false);
+      final isBookmarked = favoritesProvider.favoriteArticles?.any(
+          (item) => item == favoritesProvider.buildKey(id: widget.article.id));
+
+      if (isBookmarked ?? false) {
+        widget.article.isFavorite = true;
+      }
+    });
+  }
 
   Widget _infoRow(
       BuildContext context, bool isVisible, IconData iconName, String text) {
@@ -163,6 +184,8 @@ class _ArticleCardState extends State<ArticleCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        if (widget.isArticleDetailScreen) return;
+
         if (widget.article.abstract?.isNotEmpty ?? false) {
           Navigator.push(
             context,

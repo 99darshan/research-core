@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:researchcore/components/full_screen_info.dart';
 import 'package:researchcore/models/core_api_response.dart';
 import 'package:researchcore/services/http/core_api_client.dart';
 
 import '../components/article_card.dart';
 import '../models/article.dart';
-import '../providers/favorites_provider.dart';
 
 class SearchResultScreen extends StatefulWidget {
   final String searchText;
@@ -110,18 +108,6 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                         itemCount: articles.length,
                         itemBuilder: (context, index) {
                           Article? article = articles[index];
-                          final favoritesProvider =
-                              Provider.of<FavoritesProvider>(context);
-
-                          final isBookmarked =
-                              favoritesProvider.favoriteArticles?.any((item) =>
-                                  item ==
-                                  favoritesProvider.buildKey(id: article.id));
-
-                          if (isBookmarked ?? false) {
-                            article.isFavorite = true;
-                          }
-
                           return ArticleCard(article: article);
                         },
                       ),

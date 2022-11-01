@@ -12,7 +12,7 @@ class ThemeUtil {
       primaryColor: ThemeUtil.primaryColor,
       // https://api.flutter.dev/flutter/material/TextTheme-class.html
       textTheme: const TextTheme(
-        headline3: TextStyle(
+        headline4: TextStyle(
           color: ThemeUtil.primaryColor,
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w900,

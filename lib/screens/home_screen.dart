@@ -134,7 +134,7 @@ class HomeScreenState extends State<HomeScreen> {
           ),
           Text(
             "Research Core",
-            style: Theme.of(context).textTheme.headline3,
+            style: Theme.of(context).textTheme.headline4,
           ),
           Text(
             "Search for Open Access Research Papers",
