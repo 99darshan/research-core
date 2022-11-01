@@ -31,6 +31,11 @@ class DownloadService {
   static Future<List<io.FileSystemEntity>> allDownloads() async {
     final dirPath =
         '${(await getApplicationDocumentsDirectory()).path}/research_core_pdfs';
-    return io.Directory(dirPath).listSync();
+    final dir = io.Directory(dirPath);
+    if (dir.existsSync()) {
+      return dir.listSync();
+    }
+
+    return [];
   }
 }
