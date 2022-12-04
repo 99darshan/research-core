@@ -1,16 +1,19 @@
-# researchcore
+# Research Core
 
-Open Access Research Papers
+Android app built with flutter to browse, read, bookmark and download open access research papers.
 
-## Getting Started
+[![Google Play Store Download](https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=com.darshan.researchcore&hl=en_GB&gl=US)
 
-This project is a starting point for a Flutter application.
+## Credit
 
-A few resources to get you started if this is your first Flutter project:
+The data for this application is powered by https://core.ac.uk/
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Screenshots :framed_picture:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<div style="display: flex; flex-wrap: wrap; margin: 4px;">
+  <img src="https://user-images.githubusercontent.com/9456191/205484125-2d18d08b-f14e-46a5-a9cd-b6ac3a7e3cae.jpg" style="margin: 8px;" />
+  <img src="https://user-images.githubusercontent.com/9456191/205484127-2d40ec39-cc2e-419d-b78f-59bead07c5b5.jpg" style="margin: 8px;"/>
+  <img src="https://user-images.githubusercontent.com/9456191/205484131-3c16842f-69a7-4206-9213-ef95235db99f.jpg" style="margin: 8px;" />
+  <img src="https://user-images.githubusercontent.com/9456191/205484138-a6b0c4c8-d66e-4a79-987a-3d2f785e5c70.jpg" style="margin: 8px;"/>
+  <img src="https://user-images.githubusercontent.com/9456191/205484122-4e105d40-58e6-471f-9109-2151869d885c.jpg" style="margin: 8px;"/>
+</div>
