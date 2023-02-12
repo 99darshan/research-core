@@ -2,7 +2,7 @@
 
 Android app built with flutter to browse, read, bookmark and download open access research papers.
 
-[![Google Play Store Download](https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=com.darshan.researchcore&hl=en_GB&gl=US)
+[![Google Play Store Download](https://play.google.com/store/apps/details?id=com.darshan.researchcore)
 
 ## Credit
 
